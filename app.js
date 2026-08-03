@@ -1,5 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-analytics.js";
+
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -7,7 +8,10 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
 
 import {
-  getFirestore
+  getFirestore,
+  doc,
+  setDoc,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
 
 
@@ -24,7 +28,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-const analytics = getAnalytics(app);
+getAnalytics(app);
 
 const auth = getAuth(app);
 
@@ -61,12 +65,14 @@ function getErrorMessage(error) {
 }
 
 
-// 登録
+// 新規登録
 const signupButton = document.getElementById("signup");
+
 
 if (signupButton) {
 
-  signupButton.addEventListener("click", () => {
+  signupButton.addEventListener("click", async () => {
+
 
     const email =
       document.getElementById("email").value;
@@ -75,21 +81,41 @@ if (signupButton) {
       document.getElementById("password").value;
 
 
-    createUserWithEmailAndPassword(auth, email, password)
+    try {
 
-    .then(() => {
+      const userCredential =
+        await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+
+      const user =
+        userCredential.user;
+
+
+      // Firestoreにユーザー保存
+      await setDoc(
+        doc(db, "users", user.uid),
+        {
+          email: user.email,
+          createdAt: serverTimestamp()
+        }
+      );
+
 
       document.getElementById("message").textContent =
-      "登録成功！";
+        "登録成功！";
 
-    })
 
-    .catch((error)=>{
+    } catch(error) {
 
       document.getElementById("message").textContent =
-      getErrorMessage(error);
+        getErrorMessage(error);
 
-    });
+    }
+
 
   });
 
@@ -99,9 +125,11 @@ if (signupButton) {
 // ログイン
 const loginButton = document.getElementById("login");
 
+
 if (loginButton) {
 
-  loginButton.addEventListener("click", () => {
+  loginButton.addEventListener("click", async () => {
+
 
     const email =
       document.getElementById("email").value;
@@ -110,20 +138,26 @@ if (loginButton) {
       document.getElementById("password").value;
 
 
-    signInWithEmailAndPassword(auth, email, password)
+    try {
 
-    .then(()=>{
+      await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
 
-      window.location.href = "home.html";
 
-    })
+      window.location.href =
+        "home.html";
 
-    .catch((error)=>{
+
+    } catch(error) {
 
       document.getElementById("message").textContent =
-      getErrorMessage(error);
+        getErrorMessage(error);
 
-    });
+    }
+
 
   });
 
