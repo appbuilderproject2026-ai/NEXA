@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-analytics.js";
-import { 
+import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword
@@ -28,35 +28,43 @@ console.log("NEXA");
 console.log("Firebase接続成功");
 
 
-// 新規登録
-document.getElementById("signup").addEventListener("click", () => {
+// 登録ページだけ動く
+const signupButton = document.getElementById("signup");
 
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+if (signupButton) {
+  signupButton.addEventListener("click", () => {
 
-  createUserWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      document.getElementById("message").textContent = "登録成功！";
-    })
-    .catch((error) => {
-      document.getElementById("message").textContent = error.message;
-    });
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
-});
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        document.getElementById("message").textContent = "登録成功！";
+      })
+      .catch((error) => {
+        document.getElementById("message").textContent = error.message;
+      });
+
+  });
+}
 
 
-// ログイン
-document.getElementById("login").addEventListener("click", () => {
+// ログインページだけ動く
+const loginButton = document.getElementById("login");
 
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+if (loginButton) {
+  loginButton.addEventListener("click", () => {
 
-  signInWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      document.getElementById("message").textContent = "ログイン成功！";
-    })
-    .catch((error) => {
-      document.getElementById("message").textContent = error.message;
-    });
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
-});
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        document.getElementById("message").textContent = "ログイン成功！";
+      })
+      .catch((error) => {
+        document.getElementById("message").textContent = error.message;
+      });
+
+  });
+}
