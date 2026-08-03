@@ -96,17 +96,26 @@ if (signupButton) {
 
 
       // Firestoreにユーザー保存
-      await setDoc(
-        doc(db, "users", user.uid),
-        {
-          email: user.email,
-          createdAt: serverTimestamp()
-        }
-      );
+      try {
 
+  await setDoc(
+    doc(db, "users", user.uid),
+    {
+      email: user.email,
+      createdAt: serverTimestamp()
+    }
+  );
 
-      document.getElementById("message").textContent =
-        "登録成功！";
+  alert("Firestore保存成功！");
+
+} catch (e) {
+
+  alert("Firestore保存失敗: " + e.code + "\n" + e.message);
+
+}
+
+document.getElementById("message").textContent =
+  "登録成功！";
 
 
     } catch(error) {
