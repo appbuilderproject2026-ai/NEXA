@@ -1,4 +1,9 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-app.js";
+
+import {
+  getAuth
+} from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
+
 import {
   getFirestore,
   collection,
@@ -16,6 +21,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const db = getFirestore(app);
 
 const chatList = document.getElementById("chatList");
@@ -24,11 +30,18 @@ async function loadUsers() {
 
   chatList.innerHTML = "";
 
+  const currentUser = auth.currentUser;
+
   const querySnapshot = await getDocs(collection(db, "users"));
 
   querySnapshot.forEach((doc) => {
 
     const user = doc.data();
+
+    // 自分は表示しない
+    if (currentUser && user.email === currentUser.email) {
+      return;
+    }
 
     chatList.innerHTML += `
       <div class="chat">
