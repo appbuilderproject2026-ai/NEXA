@@ -34,32 +34,32 @@ async function loadUsers() {
 
   const querySnapshot = await getDocs(collection(db, "users"));
 
-  querySnapshot.forEach((doc) => {
+  querySnapshot.forEach((document) => {
 
-    const user = doc.data();
+    const user = document.data();
 
     // 自分は表示しない
     if (currentUser && user.email === currentUser.email) {
       return;
     }
 
-const chat = document.createElement("div");
+    const chat = document.createElement("div");
 
-chat.className = "chat";
+    chat.className = "chat";
 
-chat.innerHTML = `
-  <h3>${user.email}</h3>
-  <p>まだメッセージはありません</p>
-`;
+    chat.innerHTML = `
+      <h3>${user.email}</h3>
+      <p>まだメッセージはありません</p>
+    `;
 
-chat.addEventListener("click", () => {
+    chat.addEventListener("click", () => {
 
-  window.location.href =
-    `chat.html?user=${encodeURIComponent(user.email)}`;
+      window.location.href =
+        `chat.html?user=${encodeURIComponent(user.email)}`;
 
-});
+    });
 
-chatList.appendChild(chat);
+    chatList.appendChild(chat);
 
   });
 
