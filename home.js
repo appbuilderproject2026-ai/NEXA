@@ -43,12 +43,23 @@ async function loadUsers() {
       return;
     }
 
-    chatList.innerHTML += `
-      <div class="chat">
-        <h3>${user.email}</h3>
-        <p>まだメッセージはありません</p>
-      </div>
-    `;
+const chat = document.createElement("div");
+
+chat.className = "chat";
+
+chat.innerHTML = `
+  <h3>${user.email}</h3>
+  <p>まだメッセージはありません</p>
+`;
+
+chat.addEventListener("click", () => {
+
+  window.location.href =
+    `chat.html?user=${encodeURIComponent(user.email)}`;
+
+});
+
+chatList.appendChild(chat);
 
   });
 
