@@ -6,6 +6,10 @@ import {
   signInWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
 
+import {
+  getFirestore
+} from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyDcR8V986QrxfLRynWZHC_05xIHX7fvBt0",
@@ -19,17 +23,22 @@ const firebaseConfig = {
 
 
 const app = initializeApp(firebaseConfig);
+
 const analytics = getAnalytics(app);
 
 const auth = getAuth(app);
 
+const db = getFirestore(app);
+
 
 console.log("NEXA");
 console.log("Firebase接続成功");
+console.log("Firestore接続成功");
 
 
-// エラーを日本語に変換
+// エラー日本語化
 function getErrorMessage(error) {
+
   switch (error.code) {
 
     case "auth/email-already-in-use":
@@ -41,47 +50,46 @@ function getErrorMessage(error) {
     case "auth/weak-password":
       return "パスワードは6文字以上にしてください";
 
-    case "auth/user-not-found":
-      return "アカウントが見つかりません";
-
-    case "auth/wrong-password":
-      return "パスワードが違います";
-
     case "auth/invalid-credential":
       return "メールアドレスまたはパスワードが違います";
 
     default:
       return "エラーが発生しました";
+
   }
+
 }
 
 
-// 新規登録
+// 登録
 const signupButton = document.getElementById("signup");
 
 if (signupButton) {
 
   signupButton.addEventListener("click", () => {
 
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+    const email =
+      document.getElementById("email").value;
+
+    const password =
+      document.getElementById("password").value;
 
 
     createUserWithEmailAndPassword(auth, email, password)
 
-      .then(() => {
+    .then(() => {
 
-        document.getElementById("message").textContent =
-          "登録成功！";
+      document.getElementById("message").textContent =
+      "登録成功！";
 
-      })
+    })
 
-      .catch((error) => {
+    .catch((error)=>{
 
-        document.getElementById("message").textContent =
-          getErrorMessage(error);
+      document.getElementById("message").textContent =
+      getErrorMessage(error);
 
-      });
+    });
 
   });
 
@@ -95,21 +103,27 @@ if (loginButton) {
 
   loginButton.addEventListener("click", () => {
 
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+    const email =
+      document.getElementById("email").value;
+
+    const password =
+      document.getElementById("password").value;
 
 
     signInWithEmailAndPassword(auth, email, password)
 
-      .then(() => {
-window.location.href = "home.html";  
-      })
-      .catch((error) => {
+    .then(()=>{
 
-        document.getElementById("message").textContent =
-          getErrorMessage(error);
+      window.location.href = "home.html";
 
-      });
+    })
+
+    .catch((error)=>{
+
+      document.getElementById("message").textContent =
+      getErrorMessage(error);
+
+    });
 
   });
 
