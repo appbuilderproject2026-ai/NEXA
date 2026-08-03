@@ -102,12 +102,8 @@ if (loginButton) {
     signInWithEmailAndPassword(auth, email, password)
 
       .then(() => {
-
-        document.getElementById("message").textContent =
-          "ログイン成功！";
-
+window.location.href = "home.html";  
       })
-
       .catch((error) => {
 
         document.getElementById("message").textContent =
