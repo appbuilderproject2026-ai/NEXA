@@ -28,43 +28,93 @@ console.log("NEXA");
 console.log("Firebase接続成功");
 
 
-// 登録ページだけ動く
+// エラーを日本語に変換
+function getErrorMessage(error) {
+  switch (error.code) {
+
+    case "auth/email-already-in-use":
+      return "このメールアドレスはすでに登録されています";
+
+    case "auth/invalid-email":
+      return "メールアドレスの形式が正しくありません";
+
+    case "auth/weak-password":
+      return "パスワードは6文字以上にしてください";
+
+    case "auth/user-not-found":
+      return "アカウントが見つかりません";
+
+    case "auth/wrong-password":
+      return "パスワードが違います";
+
+    case "auth/invalid-credential":
+      return "メールアドレスまたはパスワードが違います";
+
+    default:
+      return "エラーが発生しました";
+  }
+}
+
+
+// 新規登録
 const signupButton = document.getElementById("signup");
 
 if (signupButton) {
+
   signupButton.addEventListener("click", () => {
 
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
+
     createUserWithEmailAndPassword(auth, email, password)
+
       .then(() => {
-        document.getElementById("message").textContent = "登録成功！";
+
+        document.getElementById("message").textContent =
+          "登録成功！";
+
       })
+
       .catch((error) => {
-        document.getElementById("message").textContent = error.message;
+
+        document.getElementById("message").textContent =
+          getErrorMessage(error);
+
       });
 
   });
+
 }
 
 
-// ログインページだけ動く
+// ログイン
 const loginButton = document.getElementById("login");
 
 if (loginButton) {
+
   loginButton.addEventListener("click", () => {
 
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
+
     signInWithEmailAndPassword(auth, email, password)
+
       .then(() => {
-        document.getElementById("message").textContent = "ログイン成功！";
+
+        document.getElementById("message").textContent =
+          "ログイン成功！";
+
       })
+
       .catch((error) => {
-        document.getElementById("message").textContent = error.message;
+
+        document.getElementById("message").textContent =
+          getErrorMessage(error);
+
       });
 
   });
+
 }
